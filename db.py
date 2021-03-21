@@ -4,7 +4,7 @@ conn= psycopg2.connect(
     host="localhost",
     #database="hello",
     user="postgres",
-    password="Nandita@1804")
+    password="")
 cur = conn.cursor()
 cur.execute("DROP TABLE course_student")
 cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course text)")
@@ -35,7 +35,7 @@ def connect():
     host="localhost",
     #database="hello",
     user="postgres",
-    password="Nandita@1804")
+    password="")
     return c
 
 def get_all_toys():
