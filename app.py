@@ -12,3 +12,6 @@ def index():
 @app.route('/<id>', methods=["GET"])
 def index2(id):
     return render_template('studentdetails.html', details=db.get_all_coursesOf_id(id))
+@app.route('/courses/<id>', methods=["GET"])
+def index3(id):
+    return render_template('studentdetails.html', details=db.get_all_studentsOf_courseid(id))
