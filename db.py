@@ -64,3 +64,13 @@ def get_all_coursesOf_id(id):
   cur.close()
   conn.close()
   return details
+def get_all_studentsOf_courseid(id):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select cs.uid, cs.name from course_student cs where cs.course=%s order by cs.uid"
+  data = (id, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cur.close()
+  conn.close()
+  return details
