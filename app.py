@@ -5,13 +5,44 @@ import db
 app = Flask(__name__)
 #modus = Modus(app)
 
-@app.route('/details', methods=["GET"])
+@app.route('/')
 def index():
-    return render_template('index.html', details=db.get_all_students())
+    return render_template('home.html')
 
-@app.route('/<id>', methods=["GET"])
+
+@app.route("/student", methods=["POST"])
+def stud():
+    return render_template('stud_login.html')
+
+
+@app.route("/prof", methods=["POST"])
+def prof():
+    return render_template('prof_login.html')
+
+
+@app.route('/<id>', methods=["POST"])
 def index2(id):
+    id = request.form['user_id']
     return render_template('studentdetails.html', details=db.get_all_coursesOf_id(id))
+
+
+@app.route('/courses', methods=["POST"])
+def index4():
+    id = request.form['user_id']
+    return render_template('profdetails.html', details=db.get_all_courses_of_prof(id))
+
+
+@app.route('/student_id/<id>', methods=["GET"])
+def index5(id):
+    id = index2.id
+    return render_template('ngu.html', details=db.get_ngu_details(id))
+
+
+
 @app.route('/courses/<id>', methods=["GET"])
 def index3(id):
     return render_template('studentdetails.html', details=db.get_all_studentsOf_courseid(id))
+
+
+if __name__ == "__main__":
+    app.run()
