@@ -8,7 +8,7 @@ Project folder has the dataset\
 3.	NGU list \
 4.	Dues left of student \
 5.	Withdraw/Audit \
-6.	Admin \
+6.	Admin (Adding courses, Deleting Courses, Updating Student details, Adding or Deleting Students, Adding students in courses, Deleting students from courses, Also applicable to NGU, Dues also) \
 7.	Assignments and Grades \
 8.	Statistics of a class \
 
