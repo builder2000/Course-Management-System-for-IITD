@@ -23,19 +23,23 @@ def prof():
 @app.route('/<id>', methods=["POST"])
 def index2(id):
     id = request.form['user_id']
-    return render_template('studentdetails.html', details=db.get_all_coursesOf_id(id))
+    return render_template('studentdetails.html', headings=db.get_all_coursesOf_id_cols(id),
+      details=db.get_all_coursesOf_id(id))
 
 
 @app.route('/courses', methods=["POST"])
 def index4():
     id = request.form['user_id']
-    return render_template('profdetails.html', details=db.get_all_courses_of_prof(id))
+    return render_template('profdetails.html', headings=db.get_all_courses_of_prof_cols(id),
+    details=db.get_all_courses_of_prof(id))
 
 
-@app.route('/student_id/<id>', methods=["GET"])
+@app.route('/ngu/<id>', methods=["GET"])
 def index5(id):
-    id = index2.id
-    return render_template('ngu.html', details=db.get_ngu_details(id))
+    # id = request.form['user_id']
+    # print(id)
+    headings=db.get_ngu_cols(id)
+    return render_template('ngu.html', headings=headings, details=db.get_ngu_details(id))
 
 
 
