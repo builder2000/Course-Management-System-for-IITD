@@ -1,6 +1,6 @@
 # COL362-Project
 COL362-Project-Course Management System\
-Project folder has the dataset\
+Project folder has the dataset
 
 
 1.	Course Feedback (Initially empty, students will fill the form and prof will be 
