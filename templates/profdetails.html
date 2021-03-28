@@ -21,12 +21,21 @@
                 {% for header in headings %}
                 <th>{{header}}</th>
                 {% endfor %}
+                <!--  -->
+                <th>Students</th>
+                <!--  -->
             </tr>
             {% for row in details %}
             <tr class="table_row">
                 {% for cell in row %}
                 <td class="table_cell">{{cell}}</td>
-                {% endfor %}    
+                {% endfor %}
+                <!--  -->
+                <td><form>
+                    <button formaction="/courses/{{row[0]}}">See all Students</button>
+                </form></td>
+                
+                <!--  -->
                 
             </tr>
             {% endfor %}

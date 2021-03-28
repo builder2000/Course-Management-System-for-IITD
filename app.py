@@ -45,7 +45,8 @@ def index5(id):
 
 @app.route('/courses/<id>', methods=["GET"])
 def index3(id):
-    return render_template('studentdetails.html', details=db.get_all_studentsOf_courseid(id))
+    headings = db.get_all_studentsOf_courseid_cols(id)
+    return render_template('ngu.html', headings= headings, details=db.get_all_studentsOf_courseid(id))
 
 
 if __name__ == "__main__":
