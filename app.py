@@ -24,6 +24,8 @@ def prof():
 def index2(id):
     id = request.form['user_id']
     headings, details = db.get_all_coursesOf_id(id)
+    if(len(details) == 0):
+        return render_template('no_user_found.html')
     return render_template('studentdetails.html', headings=headings,
       details=details)
 
@@ -32,6 +34,8 @@ def index2(id):
 def index4():
     id = request.form['user_id']
     headings, details = db.get_all_courses_of_prof(id)
+    if(len(details) == 0):
+        return render_template('no_user_found.html')
     return render_template('profdetails.html', headings=headings,
     details=details)
 
@@ -50,6 +54,11 @@ def index3(id):
     headings, details = db.get_all_studentsOf_courseid(id)
     return render_template('ngu.html', headings= headings, details=details)
 
+
+@app.route('/student_id/feedback/<id>', methods=["POST"])
+def index6(id):
+    headings, details = db.get_all_studentsOf_courseid(id)
+    return render_template('ngu.html', headings=headings, details=details)
 
 if __name__ == "__main__":
     app.run()
