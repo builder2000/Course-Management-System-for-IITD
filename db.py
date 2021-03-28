@@ -4,7 +4,7 @@ conn= psycopg2.connect(
     host="localhost",
     #database="hello",
     user="postgres",
-    password="p9TUnVkM") #gitignore
+    password="") #gitignore
 cur = conn.cursor()
 cur.execute("DROP TABLE course_student")
 cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course text)")
