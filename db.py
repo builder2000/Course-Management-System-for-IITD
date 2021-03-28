@@ -4,7 +4,11 @@ conn= psycopg2.connect(
     host="localhost",
     #database="hello",
     user="postgres",
+<<<<<<< HEAD
     password="p9TUnVkM") #gitignore
+=======
+    password="")
+>>>>>>> 4115483170491237353be21707c83171f844bda3
 cur = conn.cursor()
 cur.execute("DROP TABLE course_student")
 cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course text)")
@@ -41,7 +45,11 @@ def connect():
     host="localhost",
     #database="hello",
     user="postgres",
+<<<<<<< HEAD
     password="p9TUnVkM") #gitignore
+=======
+    password="")
+>>>>>>> 4115483170491237353be21707c83171f844bda3
     return c
 
 
