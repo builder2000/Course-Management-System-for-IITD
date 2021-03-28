@@ -4,7 +4,7 @@ Project folder has the dataset
 
 
 1.	Course Feedback (Initially empty, students will fill the form and prof will be 
-2.	Students of a course 
+2.	Students of a course (done)
 3.	NGU list (done now)
 4.	Dues left of student 
 5.	Withdraw/Audit 
