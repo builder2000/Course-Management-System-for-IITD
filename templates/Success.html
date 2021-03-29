@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div align="center">
+    <h1>Success</h1>
+<form>
+    
+<button onclick="goBack()">Go Back</button>
+
+<script>
+function goBack() {
+    window.history.go(-2);
+}
+</script> 
+</form>
+{% endblock %}

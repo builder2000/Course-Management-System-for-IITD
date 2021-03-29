@@ -19,6 +19,90 @@ def stud():
 def prof():
     return render_template('prof_login.html')
 
+@app.route("/admin", methods=["POST"])
+def admin():
+    return render_template('admin_login.html')
+
+@app.route('/admin_id', methods=["POST"])
+def i1():
+    return render_template('adminactions.html')
+
+@app.route('/add_to_course', methods=["POST"])
+def i2():
+    return render_template('add_to_courses.html')
+
+@app.route('/add_course', methods=["POST"])
+def i4():
+    return render_template('add_course.html')
+
+@app.route('/add_student', methods=["POST"])
+def i6():
+    return render_template('add_student.html')
+
+@app.route('/delete_from_course', methods=["POST"])
+def i8():
+    return render_template('delete_students_from_course.html')
+
+@app.route('/delete_course', methods=["POST"])
+def i10():
+    return render_template('delete_course.html')
+
+@app.route('/delete_student', methods=["POST"])
+def i12():
+    return render_template('delete_student.html')
+
+@app.route('/abcd', methods=["POST"])
+def i3():
+    s_id = request.form['user_id']
+    c_id = request.form['course_id']
+    db.add_student_to_course(s_id,c_id)
+    return render_template('Success.html')
+
+@app.route('/new_course', methods=["POST"])
+def i5():
+    sl = request.form['sl']
+    c_id = request.form['course_id']
+    c_name = request.form['course_name']
+    s_name = request.form['slot_name'] or None
+    units = request.form['units'] or None
+    t = request.form['type'] or None
+    i_name = request.form['Instructor_name'] or None
+    i_email = request.form['Instructor_Email'] or None
+    l_time = request.form['Lecture_Time'] or None
+    t_time = request.form['Tutorial_Time'] or None
+    p_time = request.form['Practical_Time'] or None
+    vac = request.form['Vacancy'] or None
+    cur = request.form['current_strength'] or None
+    db.add_course(sl,c_id,c_name,s_name,units,t,i_name,i_email,l_time,t_time,p_time,vac,cur)
+    return render_template('Success.html')
+
+@app.route('/new_student', methods=["POST"])
+def i7():
+    s_id = request.form['user_id']
+    c_id = request.form['name']
+    db.add_student(s_id,c_id)
+    return render_template('Success.html')
+
+@app.route('/remove_from_course', methods=["POST"])
+def i9():
+    s_id = request.form['user_id']
+    c_id = request.form['course_id']
+    db.del_student_from_course(s_id,c_id)
+    return render_template('Success.html')
+
+@app.route('/remove_course', methods=["POST"])
+def i11():
+    c_id = request.form['course_id']
+    db.del_course(c_id)
+    return render_template('Success.html')
+
+@app.route('/remove_student', methods=["POST"])
+def i13():
+    s_id = request.form['user_id']
+    db.del_student(s_id)
+    return render_template('Success.html')
+
+
 
 @app.route('/<id>', methods=["POST"])
 def index2(id):
