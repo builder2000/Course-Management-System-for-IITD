@@ -55,10 +55,17 @@ def index3(id):
     return render_template('ngu.html', headings= headings, details=details)
 
 
-@app.route('/student_id/feedback/<id>', methods=["POST"])
-def index6(id):
-    headings, details = db.get_all_studentsOf_courseid(id)
-    return render_template('ngu.html', headings=headings, details=details)
+@app.route('/student_id/feedback/<user>/<course>', methods=["GET", "POST"])
+def index6(user, course):
+    return render_template('feedback.html', user=user, course=course)
+
+
+@app.route('/student_id/feedback/<user>/<course>/ty', methods=["GET", "PUT", "POST"])
+def index7(user, course):
+    feedb = request.form["paragraph_text"]
+    db.add_feedback(feedb, user, course)
+    # update the database, call a function, input student id and courseid
+    return render_template("ty.html")
 
 if __name__ == "__main__":
     app.run()

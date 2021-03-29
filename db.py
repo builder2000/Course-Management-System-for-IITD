@@ -6,16 +6,18 @@ conn= psycopg2.connect(
     user="postgres",
     password="") #gitignore
 cur = conn.cursor()
-cur.execute("DROP TABLE course_student")
+cur.execute("DROP TABLE IF EXISTS course_student")
 cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course text)")
 cur.execute(
     "copy course_student from 'D:/DBMS_Project/COL362-Project/Project/course_student.csv' delimiter ',' csv header") #gitignore
-cur.execute("DROP TABLE courses")
+
+cur.execute("ALTER TABLE course_student ADD COLUMN Feedback text")
+cur.execute("DROP TABLE IF EXISTS courses")
 cur.execute("CREATE TABLE courses (Sl bigint NOT NULL, Course_Name text, Slot_Name text, Units text, Type text, Instructor text, Instructor_Email text, Lecture_Time text, Tutorial_Time text, Practical_Time text, Vacancy bigint, Current_Strength bigint, Courseid text)")
 cur.execute(
     "copy courses from 'D:/DBMS_Project/COL362-Project/Project/courses.csv' delimiter ',' csv header")
 cur.execute("copy (SELECT distinct uid, name from  course_student order by uid) TO 'D:/DBMS_Project/COL362-Project/Project/studentInfo.csv' DELIMITER ',' CSV HEADER") #gitignore
-cur.execute("DROP TABLE ngu")
+cur.execute("DROP TABLE IF EXISTS ngu")
 cur.execute(
      "CREATE TABLE ngu (userid text NOT NULL, first_name text, second_name text, PESR float,Communication float,DPE float,PESR_copy float,NCC_NSO_NSS float,Programme float,Writing float)")
 cur.execute("copy ngu from 'D:/DBMS_Project/COL362-Project/Project/ngu.csv' delimiter ',' csv header") #gitignore
@@ -32,6 +34,7 @@ conn.commit()
 # cur.fetchall() # should get [(1, 'duplo'), (2, 'lego'), (3, 'knex')]
 
 cur.execute("SELECT * FROM course_student")
+# print(cur.fetchall())
 cur.fetchall()
 cur.close()
 conn.close()
@@ -81,7 +84,7 @@ def get_all_coursesOf_id(id): #courses of a student with student id, id
 def get_all_studentsOf_courseid(id): #students with course id, id
   conn = connect()
   cur = conn.cursor()
-  SQL = "select cs.uid, cs.name from course_student cs where cs.course=%s order by cs.uid"
+  SQL = "select cs.uid, cs.name, cs.Feedback from course_student cs where cs.course=%s order by cs.uid"
   data = (id, )
   cur.execute(SQL, data)
   details = cur.fetchall()
@@ -155,3 +158,16 @@ def get_ngu_details(id):  # students with course id, id
 #   cur.close()
 #   conn.close()
 #   return cols
+
+
+def add_feedback(fb, user, course):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE course_student SET Feedback = %s WHERE uid = %s AND course = %s"
+  data = (fb, user, course, )
+  cur.execute(SQL, data)
+  # details = cur.fetchall()
+  # cols = list(map(lambda x: x[0], cur.description))
+  conn.commit()
+  cur.close()
+  conn.close()
