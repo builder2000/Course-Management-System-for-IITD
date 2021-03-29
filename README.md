@@ -3,7 +3,7 @@ COL362-Project-Course Management System\
 Project folder has the dataset
 
 
-1.	Course Feedback (Initially empty, students will fill the form and prof will be 
+1.	Course Feedback (Initially empty, students will fill the form and prof will be able to see it)(DONE)
 2.	Students of a course (done)
 3.	NGU list (done now)
 4.	Dues left of student 
