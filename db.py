@@ -11,7 +11,7 @@ cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course t
 cur.execute(
     "copy course_student from '/home/pratik/Documents/COL362/COL362-Project/Project/course_student.csv' delimiter ',' csv header") #gitignore
 cur.execute("DROP TABLE courses")
-cur.execute("CREATE TABLE courses (Sl bigint PRIMARY KEY, Course_Name text, Slot_Name text, Units text, Type text, Instructor text, Instructor_Email text, Lecture_Time text, Tutorial_Time text, Practical_Time text, Vacancy bigint, Current_Strength bigint, Courseid text)")
+cur.execute("CREATE TABLE courses (Sl bigint, Course_Name text, Slot_Name text, Units text, Type text, Instructor text, Instructor_Email text, Lecture_Time text, Tutorial_Time text, Practical_Time text, Vacancy bigint, Current_Strength bigint, Courseid text, CONSTRAINT c_key PRIMARY KEY(Courseid, Slot_Name))")
 cur.execute(
     "copy courses from '/home/pratik/Documents/COL362/COL362-Project/Project/courses.csv' delimiter ',' csv header")
 #cur.execute("copy (SELECT distinct uid, name from  course_student order by uid) TO 'D:/DBMS_Project/COL362-Project/Project/studentInfo.csv' DELIMITER ',' CSV HEADER") #gitignore
@@ -23,6 +23,12 @@ cur.execute("DROP TABLE studentInfo")
 cur.execute("CREATE TABLE studentInfo (uid text PRIMARY KEY, name text)")
 cur.execute(
     "copy studentInfo from '/home/pratik/Documents/COL362/COL362-Project/Project/studentInfo.csv' delimiter ',' csv header") #gitignore
+cur.execute("DROP TABLE admintable")
+cur.execute("CREATE TABLE admintable (uid text PRIMARY KEY)")
+cur.execute("INSERT INTO admintable VALUES('cs5180415')")
+cur.execute("INSERT INTO admintable VALUES('cs5180417')")
+cur.execute("ALTER TABLE course_student ADD COLUMN feedback text")
+
 # cur.execute("DROP TABLE toys")
 # cur.execute("CREATE TABLE toys (id serial PRIMARY KEY, name text);")
 # # let's add some starter data
@@ -233,3 +239,51 @@ def del_student(s_id):
   conn.commit()
   cur.close()
   conn.close()
+
+def check_admin(a_id):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from admintable where uid = %s"
+  data = (a_id, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def check_delete_from_course(s_id,c_id):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from course_student where uid = %(a1)s and course = %(a2)s"
+  data = {'a1': s_id, "a2": c_id}
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def check_delete_course(c_id):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from courses where Courseid = %s"
+  data = (c_id, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def check_delete_student(s_id):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from studentInfo where uid = %s"
+  data = (s_id, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)

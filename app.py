@@ -25,6 +25,10 @@ def admin():
 
 @app.route('/admin_id', methods=["POST"])
 def i1():
+    id = request.form['admin_id']
+    headings, details = db.check_admin(id)
+    if(len(details) == 0):
+        return render_template('no_user_found.html')
     return render_template('adminactions.html')
 
 @app.route('/add_to_course', methods=["POST"])
@@ -87,18 +91,27 @@ def i7():
 def i9():
     s_id = request.form['user_id']
     c_id = request.form['course_id']
+    headings, details = db.check_delete_from_course(s_id,c_id)
+    if(len(details) == 0):
+        return "no such student in the course"
     db.del_student_from_course(s_id,c_id)
     return render_template('Success.html')
 
 @app.route('/remove_course', methods=["POST"])
 def i11():
     c_id = request.form['course_id']
+    headings, details = db.check_delete_course(c_id)
+    if(len(details) == 0):
+        return "course not found"
     db.del_course(c_id)
     return render_template('Success.html')
 
 @app.route('/remove_student', methods=["POST"])
 def i13():
     s_id = request.form['user_id']
+    headings, details = db.check_delete_student(s_id)
+    if(len(details) == 0):
+        return "student not found"
     db.del_student(s_id)
     return render_template('Success.html')
 
@@ -150,6 +163,11 @@ def index7(user, course):
     db.add_feedback(feedb, user, course)
     # update the database, call a function, input student id and courseid
     return render_template("ty.html")
+
+@app.errorhandler(500)
+def internal_error(error):
+
+    return "The given info cannot be added, removed or updated"
 
 if __name__ == "__main__":
     app.run()
