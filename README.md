@@ -2,7 +2,7 @@
 COL362-Project-Course Management System\
 Project folder has the dataset\
 New Tasks-
-1. How to implement views and materialised views as well as triggers, refer to this Project Reprt.pdf to see exactly what prof wants
+1. How to implement views and materialised views as well as triggers, refer to this Project Report.pdf to see exactly what prof wants
 2. Adding Assignments and Grades and can we update them, delete them etc.
 3. Statisitcs of a class. 
 4. Making Project Report. https://www.overleaf.com/3982685371fvkntxfwwvjz
