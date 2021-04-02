@@ -182,6 +182,7 @@ def func(course):
 @app.route('/awrequest/success/<user>/<course>', methods=["GET", "PUT","POST"])
 def func2(user,course):
     db.change_status("A",user,course)
+    db.del_course_aud_request(course,user)
     return render_template("ty.html")
 
 @app.errorhandler(500)
