@@ -266,3 +266,12 @@ def check_delete_student(s_id):
   cur.close()
   conn.close()
   return (cols, details)
+def del_course_aud_request(course, user):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "DELETE FROM course_student_request WHERE uid = %s and course_id=%s"
+  data = (user,course)
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
