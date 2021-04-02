@@ -163,6 +163,26 @@ def index7(user, course):
     db.add_feedback(feedb, user, course)
     # update the database, call a function, input student id and courseid
     return render_template("ty.html")
+@app.route('/student_id/audit-withdraw-request/<user>', methods=["GET", "POST"])
+def index8(user):
+    return render_template("au-request.html", user=user)
+
+@app.route('/aw-request/<user>/success', methods=["GET", "PUT", "POST"])
+def index9(user):
+    course=request.form["course_id"]
+    db.update_course_req_table(user,course,"A")
+    #db.change_status("A",user,course)
+    return render_template("ty.html")
+
+@app.route('/awrequest/<course>', methods=["GET", "PUT","POST"])
+def func(course):
+    headings, details=db.get_course_req(course)
+    return render_template("aud_req_view.html", details=details, headings=headings)
+
+@app.route('/awrequest/success/<user>/<course>', methods=["GET", "PUT","POST"])
+def func2(user,course):
+    db.change_status("A",user,course)
+    return render_template("ty.html")
 
 @app.errorhandler(500)
 def internal_error(error):
