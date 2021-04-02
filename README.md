@@ -7,7 +7,7 @@ New Tasks-
 3. Statisitcs of a class. 
 4. Making Project Report. https://www.overleaf.com/3982685371fvkntxfwwvjz
 
-\
+---------------------------------------------------------------------------------------------------------
 1.	Course Feedback (Initially empty, students will fill the form and prof will be able to see it)(DONE)
 2.	Students of a course (done)
 3.	NGU list (done now)
