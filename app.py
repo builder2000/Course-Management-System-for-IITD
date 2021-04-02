@@ -170,7 +170,14 @@ def index8(user):
 @app.route('/aw-request/<user>/success', methods=["GET", "PUT", "POST"])
 def index9(user):
     course=request.form["course_id"]
+    headings, details = db.check_update_course_req_table(user,course)
+    if(len(details)==0):
+        return "You do not belong to this course. Kindly enter a course you are registered in"
+    headings, details = db.check_update_course_req_table2(user,course)
+    if(len(details)!=0):
+        return "You have already requested for this course"
     db.update_course_req_table(user,course,"A")
+
     #db.change_status("A",user,course)
     return render_template("ty.html")
 

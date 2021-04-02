@@ -138,14 +138,40 @@ def change_status(fb, user, course):
 def update_course_req_table(user,course,val):
   conn = connect() 
   cur = conn.cursor()
-  SQL = "INSERT INTO course_student_request(uid, course_id, status_request) VALUES (%s, %s, %s)"
-  data = (user,course,val)
+  SQL = "INSERT INTO course_student_request SELECT uid, course, %(a3)s from course_student where uid = %(a1)s and course = %(a2)s"
+  data = {'a1':user,'a2':course,'a3':val}
   cur.execute(SQL, data)
   # details = cur.fetchall()
   # cols = list(map(lambda x: x[0], cur.description))
   conn.commit()
   cur.close()
   conn.close()
+
+def check_update_course_req_table(user,course):
+  conn = connect() 
+  cur = conn.cursor()
+  SQL = "select * from course_student where uid = %(a1)s and course = %(a2)s"
+  data = {'a1':user,'a2':course}
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  conn.commit()
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def check_update_course_req_table2(user,course):
+  conn = connect() 
+  cur = conn.cursor()
+  SQL = "select * from course_student_request where uid = %(a1)s and course_id = %(a2)s"
+  data = {'a1':user,'a2':course}
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  conn.commit()
+  cur.close()
+  conn.close()
+  return (cols, details)
 
 def get_course_req(id): #students with course id, id
   conn = connect()
