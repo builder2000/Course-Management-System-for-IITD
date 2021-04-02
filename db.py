@@ -29,17 +29,11 @@ cur.execute("INSERT INTO admintable VALUES('cs5180415')")
 cur.execute("INSERT INTO admintable VALUES('cs5180417')")
 cur.execute("ALTER TABLE course_student ADD COLUMN feedback text")
 
-# cur.execute("DROP TABLE toys")
-# cur.execute("CREATE TABLE toys (id serial PRIMARY KEY, name text);")
-# # let's add some starter data
-# cur.execute("INSERT INTO toys (name) VALUES (%s)", ("duplo",))
-# cur.execute("INSERT INTO toys (name) VALUES (%s)", ("lego",))
-# cur.execute("INSERT INTO toys (name) VALUES (%s)", ("knex",))
-conn.commit()
+cur.execute("ALTER TABLE course_student ADD COLUMN status text DEFAULT 'C' ")
+cur.execute("DROP TABLE course_student_request")
+cur.execute("CREATE TABLE course_student_request(uid text, course_id text, status_request text)")
 
-# make sure data was saved
-# cur.execute("SELECT * FROM toys")
-# cur.fetchall() # should get [(1, 'duplo'), (2, 'lego'), (3, 'knex')]
+conn.commit()
 
 cur.execute("SELECT * FROM course_student")
 # print(cur.fetchall())
@@ -76,18 +70,6 @@ def get_all_coursesOf_id(id): #courses of a student with student id, id
   conn.close()
   return (cols, details)
 
-# def get_all_coursesOf_id_cols(id): #columns of table of courses of a student with student id, id
-#   conn = connect()
-#   cur = conn.cursor()
-#   SQL = "SELECT cs.uid, cs.name, c.Courseid, c.Units, c.Slot_Name FROM course_student cs inner join courses c on (c.Courseid=cs.course and cs.uid=%s) order by Courseid"
-#   data = (id, )
-#   cur.execute(SQL, data)
-#   details = cur.fetchall()
-#   cols = list(map(lambda x: x[0], cur.description))
-#   cur.close()
-#   conn.close()
-#   return cols
-
 
 def get_all_studentsOf_courseid(id): #students with course id, id
   conn = connect()
@@ -102,19 +84,6 @@ def get_all_studentsOf_courseid(id): #students with course id, id
   return (cols, details)
 
 
-# def get_all_studentsOf_courseid_cols(id): #students with course id, id
-#   conn = connect()
-#   cur = conn.cursor()
-#   SQL = "select cs.uid, cs.name from course_student cs where cs.course=%s order by cs.uid"
-#   data = (id, )
-#   cur.execute(SQL, data)
-#   details = cur.fetchall()
-#   cols = list(map(lambda x: x[0], cur.description))
-#   cur.close()
-#   conn.close()
-#   return cols
-
-
 def get_all_courses_of_prof(id):  # students with course id, id
   conn = connect()
   cur = conn.cursor()
@@ -126,18 +95,6 @@ def get_all_courses_of_prof(id):  # students with course id, id
   cur.close()
   conn.close()
   return (cols, details)
-
-# def get_all_courses_of_prof_cols(id):  # students with course id, id
-#   conn = connect()
-#   cur = conn.cursor()
-#   SQL = "select c.Courseid, c.Course_Name, c.Slot_Name, c.Units, c.Lecture_Time, c.Current_Strength from courses c where c.Instructor_Email=%s order by c.Courseid"
-#   data = (id, )
-#   cur.execute(SQL, data)
-#   details = cur.fetchall()
-#   cols = list(map(lambda x: x[0], cur.description))
-#   cur.close()
-#   conn.close()
-#   return cols
 
 
 def get_ngu_details(id):  # students with course id, id
@@ -155,19 +112,6 @@ def get_ngu_details(id):  # students with course id, id
   conn.close()
   return (cols, details)
 
-# def get_ngu_cols(id):  # students with course id, id
-#   conn = connect()
-#   cur = conn.cursor()
-#   SQL = "select n.PESR, n.Communication, n.DPE, n.NCC_NSO_NSS, n.Programme, n.Writing from ngu n where n.userid=%s "
-#   data = (id, )
-#   cur.execute(SQL, data)
-#   details = cur.fetchall()
-#   cols = list(map(lambda x: x[0], cur.description))
-#   cur.close()
-#   conn.close()
-#   return cols
-
-
 def add_feedback(fb, user, course):
   conn = connect()
   cur = conn.cursor()
@@ -179,6 +123,41 @@ def add_feedback(fb, user, course):
   conn.commit()
   cur.close()
   conn.close()
+def change_status(fb, user, course):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE course_student SET status = %s WHERE uid = %s AND course = %s"
+  data = (fb, user, course, )
+  cur.execute(SQL, data)
+  # details = cur.fetchall()
+  # cols = list(map(lambda x: x[0], cur.description))
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def update_course_req_table(user,course,val):
+  conn = connect() 
+  cur = conn.cursor()
+  SQL = "INSERT INTO course_student_request(uid, course_id, status_request) VALUES (%s, %s, %s)"
+  data = (user,course,val)
+  cur.execute(SQL, data)
+  # details = cur.fetchall()
+  # cols = list(map(lambda x: x[0], cur.description))
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def get_course_req(id): #students with course id, id
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select cs.uid, cs.course_id, cs.status_request from course_student_request cs where cs.course_id=%s order by cs.uid"
+  data = (id, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
 
 def add_student_to_course(s_id,c_id):
   conn = connect()
