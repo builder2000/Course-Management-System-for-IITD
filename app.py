@@ -246,6 +246,43 @@ def pass6(user):
     db.change_admin_password(user,n_pw)
     return render_template("Success.html")
 
+@app.route('/student_id/view-gen-req/<user>', methods=["GET", "POST"])
+def view_genrq(user):
+    user=str(user)
+    headings, details=db.view_req(user)
+    return render_template("view-gen_req.html", user=user, details=details, headings=headings)
+
+@app.route('/student_id/gen-req/<user>', methods=["GET", "POST"])
+def genrq(user):
+    return render_template("gen_req.html", user=user)
+
+@app.route('/student_id/gen-req/<user>/success', methods=["GET", "PUT", "POST"])
+def genreqsucc(user):
+    req=request.form["request"]
+    t=time()
+    req_id=user+"-"+ctime(t)
+    print("%s")
+    db.adding_gen_req(user,req_id,req)
+    # if(len(details)==0):
+    #     return "You do not belong to this course. Kindly enter a course you are registered in"
+    # headings, details = db.check_update_course_req_table2(user,course)
+    # if(len(details)!=0):
+    #     return "You have already requested for this course"
+
+    #db.change_status("A",user,course)
+    return render_template("ty.html")
+
+@app.route('/admin/gen_req', methods=["GET", "PUT","POST"])
+def rqfunc():
+    
+    headings, details=db.get_gen_req("UR")
+    return render_template("gen_req_view.html", details=details, headings=headings)
+
+@app.route('/admin/gen_req/processed/<req_id>', methods=["GET", "PUT","POST"])
+def reqfunc2(req_id):
+    db.change_genreq_status("R", req_id)
+    return render_template("ty.html")
+
 @app.errorhandler(500)
 def internal_error(error):
 
