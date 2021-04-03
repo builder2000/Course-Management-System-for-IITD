@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div align="center">
+    <h1>Update Dues Details</h1>
+    <hr><br>
+    <form action="/change_dues" method="post" enctype="multipart/form-data">
+        Enter the student id: <br>
+        <input type="text" name="user_id" required><br><br>
+        Enter Updated Dues: <br>
+        <input type="text" name="dues" required><br><br>
+
+        <input type="submit" value="Update">
+    </form>
+{% endblock %}
