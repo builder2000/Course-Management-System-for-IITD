@@ -3,41 +3,50 @@ import numpy as np
 conn= psycopg2.connect(
     host="localhost",
     database="postgres",
-    user="project",
-    password="papamummy03") #gitignore
+    user="postgres",
+    password="") #gitignore
 cur = conn.cursor()
 
-cur.execute("DROP TABLE course_student")
+cur.execute("DROP TABLE IF EXISTS course_student")
 cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course text, CONSTRAINT p_key PRIMARY KEY(uid,course))")
 cur.execute(
-    "copy course_student from '/home/pratik/Documents/COL362/COL362-Project/Project/course_student.csv' delimiter ',' csv header") #gitignore
-cur.execute("DROP TABLE courses")
+    "copy course_student from 'D:/DBMS_Project/COL362-Project/Project/course_student.csv' delimiter ',' csv header")  # gitignore
+cur.execute("DROP TABLE IF EXISTS courses")
 cur.execute("CREATE TABLE courses (Sl bigint, Course_Name text, Slot_Name text, Units text, Type text, Instructor text, Instructor_Email text, Lecture_Time text, Tutorial_Time text, Practical_Time text, Vacancy bigint, Current_Strength bigint, Courseid text, CONSTRAINT c_key PRIMARY KEY(Courseid, Slot_Name))")
 cur.execute(
-    "copy courses from '/home/pratik/Documents/COL362/COL362-Project/Project/courses.csv' delimiter ',' csv header")
+    "copy courses from 'D:/DBMS_Project/COL362-Project/Project/courses.csv' delimiter ',' csv header")
 #cur.execute("copy (SELECT distinct uid, name from  course_student order by uid) TO 'D:/DBMS_Project/COL362-Project/Project/studentInfo.csv' DELIMITER ',' CSV HEADER") #gitignore
-cur.execute("DROP TABLE ngu")
+cur.execute("DROP TABLE IF EXISTS ngu")
 cur.execute(
      "CREATE TABLE ngu (userid text PRIMARY KEY, first_name text, second_name text, PESR float,Communication float,DPE float,PESR_copy float,NCC_NSO_NSS float,Programme float,Writing float)")
-cur.execute("copy ngu from '/home/pratik/Documents/COL362/COL362-Project/Project/ngu.csv' delimiter ',' csv header") #gitignore
-cur.execute("DROP TABLE studentInfo")
+# gitignore
+cur.execute(
+    "copy ngu from 'D:/DBMS_Project/COL362-Project/Project/ngu.csv' delimiter ',' csv header")
+cur.execute("DROP TABLE IF EXISTS studentInfo")
 cur.execute("CREATE TABLE studentInfo (uid text PRIMARY KEY, name text)")
 cur.execute(
-    "copy studentInfo from '/home/pratik/Documents/COL362/COL362-Project/Project/studentInfo.csv' delimiter ',' csv header") #gitignore
-cur.execute("DROP TABLE admintable")
+    "copy studentInfo from 'D:/DBMS_Project/COL362-Project/Project/studentInfo.csv' delimiter ',' csv header")  # gitignore
+cur.execute("DROP TABLE IF EXISTS  admintable")
 cur.execute("CREATE TABLE admintable (uid text PRIMARY KEY, password text)")
 cur.execute("INSERT INTO admintable VALUES('cs5180415','cs5180415')")
 cur.execute("INSERT INTO admintable VALUES('cs5180417','cs5180417')")
+cur.execute("INSERT INTO admintable VALUES('cs1180641','cs1180641')")
 cur.execute("ALTER TABLE course_student ADD COLUMN feedback text")
 cur.execute("ALTER TABLE studentInfo ADD COLUMN password text")
 cur.execute("UPDATE studentInfo SET password = uid")
 cur.execute("ALTER TABLE course_student ADD COLUMN status text DEFAULT 'C' ")
-cur.execute("DROP TABLE course_student_request")
+cur.execute("DROP TABLE IF EXISTS course_student_request")
 cur.execute("CREATE TABLE course_student_request(uid text, course_id text, status_request text)")
 
-cur.execute("DROP TABLE prof_pass")
+cur.execute("DROP TABLE IF EXISTS prof_pass")
 cur.execute("CREATE TABLE prof_pass (prof_id text PRIMARY KEY,password text)")
 cur.execute("INSERT INTO prof_pass select distinct Instructor_Email, Instructor_Email from courses")
+
+cur.execute("DROP TABLE IF EXISTS course_student_assn")
+cur.execute(
+    "CREATE TABLE course_student_assn (student text, course text, assignment text, submission text, grade text)")
+
+
 
 conn.commit()
 
@@ -51,8 +60,8 @@ def connect():
     c= psycopg2.connect(
     host="localhost",
     database="postgres",
-    user="project",
-    password="papamummy03")
+        user="postgres",
+    password="")
     return c
 
 
@@ -409,3 +418,23 @@ def check_old_admin_pass(u_id,password):
   cur.close()
   conn.close()
   return (cols, details)
+
+
+# def add_assignment_for_course(course_id):
+#   conn = connect()
+#   cur = conn.cursor()
+#   SQL = "INSERT INTO course_student_assn(student, course, assignment) SELECT names, current_date - - AS birthday ??
+# FROM(SELECT names, generate_series(1, number) FROM a)
+# "
+
+# SELECT 
+
+
+
+#   data = {'a1': u_id, 'a2': password}
+#   cur.execute(SQL, data)
+#   details = cur.fetchall()
+#   cols = list(map(lambda x: x[0], cur.description))
+#   cur.close()
+#   conn.close()
+#   return (cols, details)

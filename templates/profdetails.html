@@ -24,6 +24,8 @@
                 <!--  -->
                 <th>Students</th>
                 <!--  -->
+                <th>Audit/Withdraw</th>
+                <th>Assignments</th>
             </tr>
             {% for row in details %}
             <tr class="table_row">
@@ -36,6 +38,9 @@
                 </form></td>
                 <td><form>
                     <button formaction="/awrequest/{{row[0]}}">See all audit requests</button>
+                </form></td>
+                <td><form>
+                        <button formaction="/add_assignment/{{row[0]}}">Add Assignment</button>
                 </form></td>
                 
                 <!--  -->

@@ -125,12 +125,12 @@ def i13():
 def index2(id):
     id = request.form['user_id']
     password = request.form['Password']
-    headings, details = db.check_stud_password(id,password)
-    if(len(details)==0):
-        return "Wrong Password"
-    headings, details = db.get_all_coursesOf_id(id)
-    if(len(details) == 0):
+
+    h, p = db.check_stud_password(id, password)
+    if(len(p) == 0):
         return render_template('no_user_found.html')
+    headings, details = db.get_all_coursesOf_id(id)
+    
     return render_template('studentdetails.html', headings=headings,
       details=details)
 
@@ -164,17 +164,6 @@ def index3(id):
     return render_template('ngu.html', headings= headings, details=details)
 
 
-@app.route('/student_id/feedback/<user>/<course>', methods=["GET", "POST"])
-def index6(user, course):
-    return render_template('feedback.html', user=user, course=course)
-
-
-@app.route('/student_id/feedback/<user>/<course>/ty', methods=["GET", "PUT", "POST"])
-def index7(user, course):
-    feedb = request.form["paragraph_text"]
-    db.add_feedback(feedb, user, course)
-    # update the database, call a function, input student id and courseid
-    return render_template("ty.html")
 @app.route('/student_id/audit-withdraw-request/<user>', methods=["GET", "POST"])
 def index8(user):
     return render_template("au-request.html", user=user)
@@ -245,6 +234,33 @@ def pass6(user):
         return "Old Password Incorrect"
     db.change_admin_password(user,n_pw)
     return render_template("Success.html")
+
+
+@app.route('/student_id/feedback/<user>/<course>', methods=["GET", "POST"])
+def index6(user, course):
+    return render_template('feedback.html', user=user, course=course)
+
+
+@app.route('/student_id/feedback/<user>/<course>/ty', methods=["GET", "PUT", "POST"])
+def index7(user, course):
+    feedb = request.form["paragraph_text"]
+    db.add_feedback(feedb, user, course)
+    # update the database, call a function, input student id and courseid
+    return render_template("ty.html")
+
+@app.route("/add_assignment/<id>", methods=["GET", "PUT", "POST"])
+def index10(id):
+    render_template("assignment.html", course_id = id)
+
+
+@app.route("/add_assignment/<course_id>/success", methods=["GET", "PUT", "POST"])
+def index10(course_id):
+    assgn = request.form["paragraph_text"]
+    # some work to do with database
+    db.add_assignment_for_course(course_id)
+    # assignment addition successful
+    # add a button to go to the page of prof
+    render_template("assignment_success.html")
 
 @app.errorhandler(500)
 def internal_error(error):
