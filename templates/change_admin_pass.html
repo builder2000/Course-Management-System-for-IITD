@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div align="center">
+    <h1>Change Password</h1>
+    <hr><br>
+    <form action="/admin_id/{{user}}/change_admin_pass" method="post" enctype="multipart/form-data">
+        Enter your old password: <br>
+        <input type="text" name="o_pass" required><br><br>
+
+        Enter your new password: <br>
+        <input type="text" name="n_pass" required><br><br>
+
+
+        <input type="submit" value="Login">
+    </form>
+{% endblock %}

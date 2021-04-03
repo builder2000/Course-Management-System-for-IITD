@@ -6,6 +6,7 @@ conn= psycopg2.connect(
     user="project",
     password="papamummy03") #gitignore
 cur = conn.cursor()
+
 cur.execute("DROP TABLE course_student")
 cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course text, CONSTRAINT p_key PRIMARY KEY(uid,course))")
 cur.execute(
@@ -24,14 +25,19 @@ cur.execute("CREATE TABLE studentInfo (uid text PRIMARY KEY, name text)")
 cur.execute(
     "copy studentInfo from '/home/pratik/Documents/COL362/COL362-Project/Project/studentInfo.csv' delimiter ',' csv header") #gitignore
 cur.execute("DROP TABLE admintable")
-cur.execute("CREATE TABLE admintable (uid text PRIMARY KEY)")
-cur.execute("INSERT INTO admintable VALUES('cs5180415')")
-cur.execute("INSERT INTO admintable VALUES('cs5180417')")
+cur.execute("CREATE TABLE admintable (uid text PRIMARY KEY, password text)")
+cur.execute("INSERT INTO admintable VALUES('cs5180415','cs5180415')")
+cur.execute("INSERT INTO admintable VALUES('cs5180417','cs5180417')")
 cur.execute("ALTER TABLE course_student ADD COLUMN feedback text")
-
+cur.execute("ALTER TABLE studentInfo ADD COLUMN password text")
+cur.execute("UPDATE studentInfo SET password = uid")
 cur.execute("ALTER TABLE course_student ADD COLUMN status text DEFAULT 'C' ")
 cur.execute("DROP TABLE course_student_request")
 cur.execute("CREATE TABLE course_student_request(uid text, course_id text, status_request text)")
+
+cur.execute("DROP TABLE prof_pass")
+cur.execute("CREATE TABLE prof_pass (prof_id text PRIMARY KEY,password text)")
+cur.execute("INSERT INTO prof_pass select distinct Instructor_Email, Instructor_Email from courses")
 
 conn.commit()
 
@@ -301,3 +307,105 @@ def del_course_aud_request(course, user):
   conn.commit()
   cur.close()
   conn.close()
+
+def check_stud_password(s_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from studentInfo where uid = %s and password = %s"
+  data = (s_id, password)
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def check_admin_password(s_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from admintable where uid = %s and password = %s"
+  data = (s_id, password)
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def check_prof_password(s_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from prof_pass where prof_id = %s and password = %s"
+  data = (s_id, password)
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def change_stud_password(u_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE studentInfo set password = %(a2)s where uid = %(a1)s"
+  data = {'a1': u_id, 'a2': password}
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def check_old_stud_pass(u_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from studentInfo where password = %(a2)s and uid = %(a1)s"
+  data = {'a1': u_id, 'a2': password}
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def change_prof_password(u_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE prof_pass set password = %(a2)s where prof_id = %(a1)s"
+  data = {'a1': u_id, 'a2': password}
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def check_old_prof_pass(u_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from prof_pass where password = %(a2)s and prof_id = %(a1)s"
+  data = {'a1': u_id, 'a2': password}
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def change_admin_password(u_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE admintable set password = %(a2)s where uid = %(a1)s"
+  data = {'a1': u_id, 'a2': password}
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def check_old_admin_pass(u_id,password):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from admintable where password = %(a2)s and uid = %(a1)s"
+  data = {'a1': u_id, 'a2': password}
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)

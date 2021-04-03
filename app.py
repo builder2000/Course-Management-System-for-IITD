@@ -26,10 +26,14 @@ def admin():
 @app.route('/admin_id', methods=["POST"])
 def i1():
     id = request.form['admin_id']
+    password = request.form['Password']
     headings, details = db.check_admin(id)
     if(len(details) == 0):
         return render_template('no_user_found.html')
-    return render_template('adminactions.html')
+    headings, details = db.check_admin_password(id,password)
+    if(len(details) == 0):
+        return "Wrong Password"
+    return render_template('adminactions.html', user = id)
 
 @app.route('/add_to_course', methods=["POST"])
 def i2():
@@ -120,6 +124,10 @@ def i13():
 @app.route('/<id>', methods=["POST"])
 def index2(id):
     id = request.form['user_id']
+    password = request.form['Password']
+    headings, details = db.check_stud_password(id,password)
+    if(len(details)==0):
+        return "Wrong Password"
     headings, details = db.get_all_coursesOf_id(id)
     if(len(details) == 0):
         return render_template('no_user_found.html')
@@ -130,11 +138,15 @@ def index2(id):
 @app.route('/courses', methods=["POST"])
 def index4():
     id = request.form['user_id']
+    password = request.form['Password']
+    headings, details = db.check_prof_password(id,password)
+    if(len(details)==0):
+        return "Wrong Password"
     headings, details = db.get_all_courses_of_prof(id)
     if(len(details) == 0):
         return render_template('no_user_found.html')
     return render_template('profdetails.html', headings=headings,
-    details=details)
+    details=details, user = id)
 
 
 @app.route('/ngu/<id>', methods=["GET"])
@@ -191,6 +203,48 @@ def func2(user,course):
     db.change_status("A",user,course)
     db.del_course_aud_request(course,user)
     return render_template("ty.html")
+
+@app.route("/student_id/<user>/password_change", methods = ["GET","POST"])
+def pass1(user):
+    return render_template("change_stud_pass.html",user = user)
+
+@app.route("/student_id/<user>/change_stud_pass",methods = ["GET","PUT","POST"])
+def pass2(user):
+    o_pw = request.form["o_pass"]
+    n_pw = request.form["n_pass"]
+    headings,details = db.check_old_stud_pass(user,o_pw)
+    if(len(details)==0):
+        return "Old Password Incorrect"
+    db.change_stud_password(user,n_pw)
+    return render_template("Success.html")
+
+@app.route("/prof_id/<user>/password_change", methods = ["GET","POST"])
+def pass3(user):
+    return render_template("change_prof_password.html",user = user)
+
+@app.route("/prof_id/<user>/change_prof_pass",methods = ["GET","PUT","POST"])
+def pass4(user):
+    o_pw = request.form["o_pass"]
+    n_pw = request.form["n_pass"]
+    headings,details = db.check_old_prof_pass(user,o_pw)
+    if(len(details)==0):
+        return "Old Password Incorrect"
+    db.change_prof_password(user,n_pw)
+    return render_template("Success.html")
+
+@app.route("/admin_id/<user>/password_change", methods = ["GET","POST"])
+def pass5(user):
+    return render_template("change_admin_pass.html",user = user)
+
+@app.route("/admin_id/<user>/change_admin_pass",methods = ["GET","PUT","POST"])
+def pass6(user):
+    o_pw = request.form["o_pass"]
+    n_pw = request.form["n_pass"]
+    headings,details = db.check_old_admin_pass(user,o_pw)
+    if(len(details)==0):
+        return "Old Password Incorrect"
+    db.change_admin_password(user,n_pw)
+    return render_template("Success.html")
 
 @app.errorhandler(500)
 def internal_error(error):
