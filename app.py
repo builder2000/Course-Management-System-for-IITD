@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request
 #from flask_modus import Modus
 import db
 import time
+from time import time,ctime
 
 app = Flask(__name__)
 #modus = Modus(app)
@@ -59,6 +60,19 @@ def i10():
 @app.route('/delete_student', methods=["POST"])
 def i12():
     return render_template('delete_student.html')
+
+@app.route('/update_student', methods=["POST"])
+def i14():
+    return render_template('update_student.html')
+
+@app.route('/update_dues', methods=["POST"])
+def i16():
+    return render_template('update_dues.html')
+
+@app.route('/update_ngu', methods=["POST"])
+def i18():
+    return render_template('update_ngu.html')
+
 
 @app.route('/abcd', methods=["POST"])
 def i3():
@@ -120,7 +134,36 @@ def i13():
     db.del_student(s_id)
     return render_template('Success.html')
 
+@app.route('/change_student', methods=["POST"])
+def i15():
+    s_id = request.form['user_id']
+    name = request.form['name']
+    headings, details = db.check_delete_student(s_id)
+    if(len(details) == 0):
+        return "student not found"
+    db.update_student(s_id,name)
+    return render_template('Success.html')
 
+@app.route('/change_dues', methods=["POST"])
+def i17():
+    s_id = request.form['user_id']
+    dues = request.form['dues']
+    headings, details = db.check_update_dues(s_id)
+    if(len(details) == 0):
+        db.update_dues2(s_id,dues)
+        return render_template('Success.html')
+    db.update_dues(s_id,dues)
+    return render_template('Success.html')
+
+@app.route('/change_ngu', methods=["POST"])
+def i19():
+    s_id = request.form['user_id']
+    hours = request.form['hours']
+    headings, details = db.check_update_ngu(s_id)
+    if(len(details) == 0):
+        return "student not found"
+    db.update_ngu(s_id,hours)
+    return render_template('Success.html')
 
 @app.route('/<id>', methods=["POST"])
 def index2(id):
@@ -354,10 +397,14 @@ def reqfunc2(req_id):
     db.change_genreq_status("R", req_id)
     return render_template("ty.html")
 
-# @app.errorhandler(500)
-# def internal_error(error):
+@app.route('/student_id/<user>/dues_details', methods = ["GET", "PUT", "POST"])
+def dues1(user):
+    headings, details = db.get_dues(user)
+    return render_template("dues.html",details = details, headings = headings)
 
-#     return "The given info cannot be added, removed or updated"
+@app.errorhandler(500)
+def internal_error(error):
+    return "The given info cannot be added, removed or updated"
 
 if __name__ == "__main__":
     app.run()
