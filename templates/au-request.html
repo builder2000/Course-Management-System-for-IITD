@@ -7,7 +7,12 @@
 
         Enter the course id: 
         <input type="text" name="course_id" required><br><br>
-        
+        <label for="option">Choose the desired option:</label>
+        <select name="option" id="option">
+            <option value="A">Audit</option>
+            <option value="W">Withdraw</option>
+        </select>
+        <br><br>
         <input type="submit" value="Add">
     </form>
 {% endblock %}
