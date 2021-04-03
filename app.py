@@ -73,6 +73,18 @@ def i16():
 def i18():
     return render_template('update_ngu.html')
 
+@app.route('/view_course', methods=["POST"])
+def i20():
+    return render_template('view_course_input.html')
+
+@app.route('/view_student', methods=["POST"])
+def i22():
+    return render_template('view_student_credentials.html')
+
+@app.route('/view_prof', methods=["POST"])
+def i24():
+    return render_template('view_professor_input.html')
+
 
 @app.route('/abcd', methods=["POST"])
 def i3():
@@ -164,6 +176,30 @@ def i19():
         return "student not found"
     db.update_ngu(s_id,hours)
     return render_template('Success.html')
+
+@app.route('/view_this_course', methods=["POST"])
+def i21():
+    c_id = request.form['course_id']
+    headings, details = db.get_all_studentsOf_courseid(c_id)
+    if(len(details) == 0):
+        return "Course Not Found"
+    return render_template('view_courses.html',headings = headings, details = details)
+
+@app.route('/view_this_professor', methods=["POST"])
+def i23():
+    p_id = request.form['prof_id']
+    headings, details = db.get_all_courses_of_prof(p_id)
+    if(len(details) == 0):
+        return "Professor Not Found"
+    return render_template('view_courses.html',headings = headings, details = details)
+
+@app.route('/view_this_student', methods=["POST"])
+def i25():
+    s_id = request.form['user_id']
+    headings, details = db.get_all_coursesOf_id(s_id)
+    if(len(details) == 0):
+        return "Student Not Found"
+    return render_template('view_courses.html',headings = headings, details = details)
 
 @app.route('/<id>', methods=["POST"])
 def index2(id):

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div align="center">
+    <h1>Enter Professor Credentials</h1>
+    <hr><br>
+    <form action="/view_this_professor" method="post" enctype="multipart/form-data">
+        Enter your Professor id: <br>
+        <input type="text" name="prof_id" required><br><br>
+
+
+        <input type="submit" value="View">
+    </form>
+{% endblock %}
