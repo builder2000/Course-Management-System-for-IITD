@@ -42,8 +42,15 @@
         <button formaction="/student_id/audit-withdraw-request/{{details[0][0]}}">Audit Withdraw-request</button>
     </form>
     <form>
+        <button formaction="/student_id/gen-req/{{details[0][0]}}">Add a General Request</button>
+    </form>
+    <form>
+        <button formaction="/student_id/view-gen-req/{{details[0][0]}}">View Your Existing General Request(s)</button>
+    </form>
+    <form>
         <button formaction="/student_id/{{details[0][0]}}/password_change">Change Password</button>
     </form>
+   
 
     </div>
 {% endblock %}
