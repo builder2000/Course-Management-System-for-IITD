@@ -44,7 +44,7 @@ cur.execute("INSERT INTO prof_pass select distinct Instructor_Email, Instructor_
 
 cur.execute("DROP TABLE IF EXISTS course_student_assn")
 cur.execute(
-    "CREATE TABLE course_student_assn (student text, course text, assignment text, submission text, grade text)")
+    "CREATE TABLE course_student_assn (uid text, student text, course text, assignment text, submission text, grade text)")
 
 
 
@@ -473,3 +473,20 @@ def view_req(user):
   cur.close()
   conn.close()
   return (cols,details)
+
+
+def add_assignment_for_course(course_id, assgn):
+
+  d, l = get_all_studentsOf_courseid(course_id)
+  conn = connect()
+  cur = conn.cursor()
+
+  for i in range(len(l)):
+    SQL = "INSERT INTO course_student_assn(uid, student, course, assignment) VALUES(%s, %s, %s, %s)"
+    data = (l[i][0], l[i][1], course_id, assgn)
+    cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+  return
+

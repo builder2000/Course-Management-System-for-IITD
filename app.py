@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request
 #from flask_modus import Modus
 import db
+import time
 
 app = Flask(__name__)
 #modus = Modus(app)
@@ -235,7 +236,6 @@ def pass6(user):
     db.change_admin_password(user,n_pw)
     return render_template("Success.html")
 
-<<<<<<< HEAD
 
 @app.route('/student_id/feedback/<user>/<course>', methods=["GET", "POST"])
 def index6(user, course):
@@ -255,14 +255,16 @@ def index10(id):
 
 
 @app.route("/add_assignment/<course_id>/success", methods=["GET", "PUT", "POST"])
-def index10(course_id):
+def index11(course_id):
     assgn = request.form["paragraph_text"]
     # some work to do with database
-    db.add_assignment_for_course(course_id)
+    db.add_assignment_for_course(course_id, assgn)
     # assignment addition successful
     # add a button to go to the page of prof
     render_template("assignment_success.html")
-=======
+
+
+
 @app.route('/student_id/view-gen-req/<user>', methods=["GET", "POST"])
 def view_genrq(user):
     user=str(user)
@@ -277,7 +279,7 @@ def genrq(user):
 def genreqsucc(user):
     req=request.form["request"]
     t=time()
-    req_id=user+"-"+ctime(t)
+    req_id=user+"-"+ time.ctime(t)
     print("%s")
     db.adding_gen_req(user,req_id,req)
     # if(len(details)==0):
@@ -299,7 +301,6 @@ def rqfunc():
 def reqfunc2(req_id):
     db.change_genreq_status("R", req_id)
     return render_template("ty.html")
->>>>>>> dff4ded211f0374e26ed408541ffda9a65537577
 
 @app.errorhandler(500)
 def internal_error(error):
