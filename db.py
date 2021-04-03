@@ -4,7 +4,7 @@ conn= psycopg2.connect(
     host="localhost",
     database="postgres",
     user="postgres",
-    password="p9TUnVkM")  # gitignore
+    password="")  # gitignore
 cur = conn.cursor()
 
 cur.execute("DROP TABLE IF EXISTS course_student")
@@ -61,7 +61,7 @@ def connect():
     host="localhost",
     database="postgres",
         user="postgres",
-        password="p9TUnVkM")
+        password="")
     return c
 
 
