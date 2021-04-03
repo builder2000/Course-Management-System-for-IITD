@@ -353,7 +353,10 @@ def index14(user, course):
 
 @app.route('/student_id/view_grade/<user>/<course>', methods=["GET", "POST"])
 def index15(user, course):
-    grade = db.add_submission_to_table(user, course)
+    grade = db.get_grade(user, course)
+
+    if(len(grade) == 0):
+        return render_template("not_graded_yet.html", grade=grade)
 
     return render_template("grade.html", grade=grade)
 
@@ -374,7 +377,7 @@ def genrq(user):
 def genreqsucc(user):
     req=request.form["request"]
     t=time()
-    req_id=user+"-"+ time.ctime(t)
+    req_id=user+"-"+ ctime(t)
     print("%s")
     db.adding_gen_req(user,req_id,req)
     # if(len(details)==0):
