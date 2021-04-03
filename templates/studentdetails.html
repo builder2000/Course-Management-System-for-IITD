@@ -22,6 +22,9 @@
                 <th>{{header}}</th>
                 {% endfor %}
                 <th>Feedback</th>
+                <th>Assignment</th>
+                <th>Submission</th>
+                <th>Grade</th>
             </tr>
             {% for row in details %}
             <tr class="table_row">
@@ -30,6 +33,15 @@
                 {% endfor %}
                 <td><form>
                     <button formaction="/student_id/feedback/{{row[0]}}/{{row[2]}}">Course Feedback</button>
+                </form></td>
+                <td><form>
+                    <button formaction="/student_id/v_assgn/{{row[0]}}/{{row[2]}}">View Assignment</button>
+                </form></td>
+                <td><form>
+                    <button formaction="/student_id/s_assgn/{{row[0]}}/{{row[2]}}">Submit Assignment</button>
+                </form></td>
+                <td><form>
+                    <button formaction="/student_id/view_grade/{{row[0]}}/{{row[2]}}">View Grade</button>
                 </form></td>
                 
             </tr>

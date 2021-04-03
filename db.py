@@ -4,7 +4,7 @@ conn= psycopg2.connect(
     host="localhost",
     database="postgres",
     user="postgres",
-    password="") #gitignore
+    password="p9TUnVkM")  # gitignore
 cur = conn.cursor()
 
 cur.execute("DROP TABLE IF EXISTS course_student")
@@ -61,7 +61,7 @@ def connect():
     host="localhost",
     database="postgres",
         user="postgres",
-    password="")
+        password="p9TUnVkM")
     return c
 
 
@@ -490,3 +490,50 @@ def add_assignment_for_course(course_id, assgn):
   conn.close()
   return
 
+
+def get_assgn(course):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "SELECT assignment from course_student_assn where course=%s"
+  data = (course, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  # cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return details
+
+
+def add_submission_to_table(user, course, assgn):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE course_student_assn SET submission = %s WHERE uid=%s AND course=%s"
+  data = (assgn, user, course, )
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+
+def add_grade(user, course, grade):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE course_student_assn SET grade = %s WHERE uid=%s AND course=%s"
+  data = (grade, user, course, )
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+
+def get_student_submission(user, course):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "SELECT submission from course_student_assn where course=%s AND uid=%s"
+  data = (course, user, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  # cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return details

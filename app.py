@@ -158,11 +158,32 @@ def index5(id):
     return render_template('ngu.html', headings=headings, details=details)
 
 
+@app.route('/courses/add_grade/<user>/<course>/success', methods=["GET", "POST"])
+def index16(user, course):
+    # headings, details = db.get_all_studentsOf_courseid(id)
+    grade = request.form["paragraph_text"]
+    db.add_grade(user, course, grade)
+
+    return render_template('add_grade_success.html', user=user)
+
+@app.route('/courses/add_grade/<user>/<course>', methods=["GET", "POST"])
+def index17(user, course):
+    # headings, details = db.get_all_studentsOf_courseid(id)
+    return render_template('add_grade_text.html', user=user, course=course)
+
+
+@app.route('/courses/v_submission/<user>/<course>', methods=["GET", "POST"])
+def index18(user, course):
+    assgn = db.get_student_submission(user, course)
+    if(len(assgn) == 0):
+        return render_template('no_assgn_student.html', user=user)
+    return render_template('v_assgn.html', text=assgn[0][0])
+
 
 @app.route('/courses/<id>', methods=["GET"])
 def index3(id):
     headings, details = db.get_all_studentsOf_courseid(id)
-    return render_template('ngu.html', headings= headings, details=details)
+    return render_template('add_grade.html', headings= headings, details=details, id=id)
 
 
 @app.route('/student_id/audit-withdraw-request/<user>', methods=["GET", "POST"])
@@ -249,19 +270,50 @@ def index7(user, course):
     # update the database, call a function, input student id and courseid
     return render_template("ty.html")
 
-@app.route("/add_assignment/<id>", methods=["GET", "PUT", "POST"])
+@app.route("/add_assignment/<id>", methods=["GET", "POST"])
 def index10(id):
-    render_template("assignment.html", course_id = id)
+    return render_template("assignment.html", id = id)
 
 
-@app.route("/add_assignment/<course_id>/success", methods=["GET", "PUT", "POST"])
-def index11(course_id):
+@app.route("/add_assignment/<id>/success", methods=["GET", "PUT", "POST"])
+def index11(id):
     assgn = request.form["paragraph_text"]
     # some work to do with database
-    db.add_assignment_for_course(course_id, assgn)
+    db.add_assignment_for_course(id, assgn)
     # assignment addition successful
     # add a button to go to the page of prof
-    render_template("assignment_success.html")
+    return render_template("assignment_success.html")
+
+
+@app.route('/student_id/v_assgn/<user>/<course>', methods=["GET", "POST"])
+def index12(user, course):
+    assgn = db.get_assgn(course)
+    if(len(assgn) == 0):
+        return render_template('no_assgn.html')
+    return render_template('v_assgn.html', text = assgn[0][0])
+
+
+@app.route('/student_id/s_assgn/<user>/<course>', methods=["GET", "POST"])
+def index13(user, course):
+    return render_template("s_assignment.html", user=user, course=course)
+
+
+@app.route('/student_id/s_assgn/<user>/<course>/success', methods=["GET", "POST"])
+def index14(user, course):
+    assgn = request.form["paragraph_text"]
+    # some work to do with database
+    db.add_submission_to_table(user, course, assgn)
+    # assignment addition successful
+    # add a button to go to the page of prof
+    return render_template("assignment_s_success.html")
+
+
+@app.route('/student_id/view_grade/<user>/<course>', methods=["GET", "POST"])
+def index15(user, course):
+    grade = db.add_submission_to_table(user, course)
+
+    return render_template("grade.html", grade=grade)
+
 
 
 
@@ -302,10 +354,10 @@ def reqfunc2(req_id):
     db.change_genreq_status("R", req_id)
     return render_template("ty.html")
 
-@app.errorhandler(500)
-def internal_error(error):
+# @app.errorhandler(500)
+# def internal_error(error):
 
-    return "The given info cannot be added, removed or updated"
+#     return "The given info cannot be added, removed or updated"
 
 if __name__ == "__main__":
     app.run()

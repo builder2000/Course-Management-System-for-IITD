@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div align="center">
+    <h3>Add Grade</h3>
+    <hr><br>
+    <form action="/courses/add_grade/{{user}}/{{course}}/success" method="post" enctype="multipart/form-data">
+        <textarea name="paragraph_text" cols="5" rows="1"></textarea><br>
+        <input type="submit" value="Grade">
+    </form>
+
+</div>
+
+
+{% endblock %}
