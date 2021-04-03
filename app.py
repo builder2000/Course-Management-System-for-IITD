@@ -236,14 +236,14 @@ def index8(user):
 @app.route('/aw-request/<user>/success', methods=["GET", "PUT", "POST"])
 def index9(user):
     course=request.form["course_id"]
+    option=request.form["option"]
     headings, details = db.check_update_course_req_table(user,course)
     if(len(details)==0):
         return "You do not belong to this course. Kindly enter a course you are registered in"
     headings, details = db.check_update_course_req_table2(user,course)
     if(len(details)!=0):
         return "You have already requested for this course"
-    db.update_course_req_table(user,course,"A")
-
+    db.update_course_req_table(user,course, option)
     #db.change_status("A",user,course)
     return render_template("ty.html")
 
@@ -252,9 +252,9 @@ def func(course):
     headings, details=db.get_course_req(course)
     return render_template("aud_req_view.html", details=details, headings=headings)
 
-@app.route('/awrequest/success/<user>/<course>', methods=["GET", "PUT","POST"])
-def func2(user,course):
-    db.change_status("A",user,course)
+@app.route('/awrequest/success/<user>/<course>/<option>', methods=["GET", "PUT","POST"])
+def func2(user,course,option):
+    db.change_status(option,user,course)
     db.del_course_aud_request(course,user)
     return render_template("ty.html")
 
