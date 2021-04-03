@@ -67,7 +67,7 @@ def get_all_students():
 def get_all_coursesOf_id(id): #courses of a student with student id, id
   conn = connect()
   cur = conn.cursor()
-  SQL = "SELECT cs.uid, cs.name, c.Courseid, c.Units, c.Slot_Name FROM course_student cs inner join courses c on (c.Courseid=cs.course and cs.uid=%s) order by Courseid"
+  SQL = "SELECT cs.uid, cs.name, c.Courseid, c.Units, c.Slot_Name, cs.status FROM course_student cs inner join courses c on (c.Courseid=cs.course and cs.uid=%s) order by Courseid"
   data = (id, )
   cur.execute(SQL, data)
   details = cur.fetchall()
@@ -80,7 +80,7 @@ def get_all_coursesOf_id(id): #courses of a student with student id, id
 def get_all_studentsOf_courseid(id): #students with course id, id
   conn = connect()
   cur = conn.cursor()
-  SQL = "select cs.uid, cs.name, cs.Feedback from course_student cs where cs.course=%s order by cs.uid"
+  SQL = "select cs.uid, cs.name, cs.status, cs.Feedback from course_student cs where cs.course=%s order by cs.uid"
   data = (id, )
   cur.execute(SQL, data)
   details = cur.fetchall()
@@ -409,3 +409,57 @@ def check_old_admin_pass(u_id,password):
   cur.close()
   conn.close()
   return (cols, details)
+
+def adding_gen_req(u_id, req_id, request):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "INSERT INTO student_request(uid, request, req_id ) VALUES(%(a1)s, %(a2)s, %(a3)s)"
+  data = {'a1': u_id, 'a2': request, 'a3':req_id}
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def get_gen_req(status):
+  conn=connect()
+  cur=conn.cursor()
+  SQL="SELECT * from student_request where status=%(a1)s"
+  data={'a1':status}
+  cur.execute(SQL,data)
+  details=cur.fetchall()
+  cols= list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols,details)
+
+def del_gen_req(req_id):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "DELETE FROM student_request WHERE req_id=%s"
+  data = (req_id)
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def change_genreq_status(status,req_id):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "UPDATE student_request SET status = %s WHERE req_id=%s"
+  data = (status, req_id)
+  cur.execute(SQL, data)
+  conn.commit()
+  cur.close()
+  conn.close()
+
+def view_req(user):
+  conn=connect()
+  cur=conn.cursor()
+  SQL="SELECT * from student_request where uid=%(a1)s"
+  data={'a1': user}
+  cur.execute(SQL,data)
+  details=cur.fetchall()
+  cols= list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols,details)
