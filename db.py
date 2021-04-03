@@ -419,27 +419,7 @@ def check_old_admin_pass(u_id,password):
   conn.close()
   return (cols, details)
 
-<<<<<<< HEAD
 
-# def add_assignment_for_course(course_id):
-#   conn = connect()
-#   cur = conn.cursor()
-#   SQL = "INSERT INTO course_student_assn(student, course, assignment) SELECT names, current_date - - AS birthday ??
-# FROM(SELECT names, generate_series(1, number) FROM a)
-# "
-
-# SELECT 
-
-
-
-#   data = {'a1': u_id, 'a2': password}
-#   cur.execute(SQL, data)
-#   details = cur.fetchall()
-#   cols = list(map(lambda x: x[0], cur.description))
-#   cur.close()
-#   conn.close()
-#   return (cols, details)
-=======
 def adding_gen_req(u_id, req_id, request):
   conn = connect()
   cur = conn.cursor()
@@ -493,4 +473,3 @@ def view_req(user):
   cur.close()
   conn.close()
   return (cols,details)
->>>>>>> dff4ded211f0374e26ed408541ffda9a65537577
