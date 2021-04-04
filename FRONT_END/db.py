@@ -2,8 +2,8 @@ import psycopg2
 conn= psycopg2.connect(
     host="localhost",
     database="postgres",
-    user="postgres",
-    password="") #gitignore
+    user="project",
+    password="papamummy03") #gitignore
 cur = conn.cursor()
 
 cur.execute("DROP TABLE IF EXISTS course_student")
@@ -64,8 +64,8 @@ def connect():
     c= psycopg2.connect(
     host="localhost",
     database="postgres",
-        user="postgres",
-    password="")
+        user="project",
+    password="papamummy03")
     return c
 
 def get_all_coursesOf_id(id): #courses of a student with student id, id
