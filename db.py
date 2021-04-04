@@ -3,28 +3,28 @@ conn= psycopg2.connect(
     host="localhost",
     database="postgres",
     user="postgres",
-    password="") #gitignore
+    password="p9TUnVkM") #gitignore
 cur = conn.cursor()
 
 cur.execute("DROP TABLE IF EXISTS course_student")
 cur.execute("CREATE TABLE course_student (uid text NOT NULL, name text, course text, CONSTRAINT p_key PRIMARY KEY(uid,course))")
 cur.execute(
-    "copy course_student from '/home/pratik/Documents/COL362/COL362-Project/Project/course_student.csv' delimiter ',' csv header")  # gitignore
+    "copy course_student from 'D:/DBMS_Project/COL362-Project/Project/course_student.csv' delimiter ',' csv header")  # gitignore
 cur.execute("DROP TABLE IF EXISTS courses")
 cur.execute("CREATE TABLE courses (Sl bigint, Course_Name text, Slot_Name text, Units text, Type text, Instructor text, Instructor_Email text, Lecture_Time text, Tutorial_Time text, Practical_Time text, Vacancy bigint, Current_Strength bigint, Courseid text, CONSTRAINT c_key PRIMARY KEY(Courseid, Slot_Name))")
 cur.execute(
-    "copy courses from '/home/pratik/Documents/COL362/COL362-Project/Project/courses.csv' delimiter ',' csv header")
+    "copy courses from 'D:/DBMS_Project/COL362-Project/Project/courses.csv' delimiter ',' csv header")
 #cur.execute("copy (SELECT distinct uid, name from  course_student order by uid) TO 'D:/DBMS_Project/COL362-Project/Project/studentInfo.csv' DELIMITER ',' CSV HEADER") #gitignore
 cur.execute("DROP TABLE IF EXISTS ngu")
 cur.execute(
      "CREATE TABLE ngu (userid text PRIMARY KEY, first_name text, second_name text, PESR float,Communication float,DPE float,PESR_copy float,NCC_NSO_NSS float,Programme float,Writing float)")
 # gitignore
 cur.execute(
-    "copy ngu from '/home/pratik/Documents/COL362/COL362-Project/Project/ngu.csv' delimiter ',' csv header")
+    "copy ngu from 'D:/DBMS_Project/COL362-Project/Project/ngu.csv' delimiter ',' csv header")
 cur.execute("DROP TABLE IF EXISTS studentInfo")
 cur.execute("CREATE TABLE studentInfo (uid text PRIMARY KEY, name text)")
 cur.execute(
-    "copy studentInfo from '/home/pratik/Documents/COL362/COL362-Project/Project/studentInfo.csv' delimiter ',' csv header")  # gitignore
+    "copy studentInfo from 'D:/DBMS_Project/COL362-Project/Project/studentInfo.csv' delimiter ',' csv header")  # gitignore
 cur.execute("DROP TABLE IF EXISTS  admintable")
 cur.execute("CREATE TABLE admintable (uid text PRIMARY KEY, password text)")
 cur.execute("INSERT INTO admintable VALUES('cs5180415','cs5180415')")
@@ -45,7 +45,7 @@ cur.execute("CREATE TABLE student_request (uid text,request text,req_id text PRI
 cur.execute("DROP TABLE IF EXISTS dues_table")
 cur.execute("CREATE TABLE dues_table (Sl bigint,hostname text, amtdue bigint, amtrcv bigint, name text,uid text PRIMARY KEY)")
 cur.execute(
-    "copy dues_table from '/home/pratik/Documents/COL362/COL362-Project/Project/Dues_List-converted.csv' delimiter ',' csv header")  # gitignore
+    "copy dues_table from 'D:/DBMS_Project/COL362-Project/Project/Dues_List-converted.csv' delimiter ',' csv header")  # gitignore
 cur.execute("DROP TABLE IF EXISTS course_student_assn")
 cur.execute(
     "CREATE TABLE course_student_assn (uid text, student text, course text, assignment_id text, assignment text, submission text, grade text)")
@@ -65,7 +65,7 @@ def connect():
     host="localhost",
     database="postgres",
         user="postgres",
-    password="")
+    password="p9TUnVkM")
     return c
 
 

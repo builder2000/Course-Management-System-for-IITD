@@ -3,7 +3,7 @@ from flask import Flask, render_template, redirect, url_for, request
 import db
 import time
 import os
-from time import time,ctime
+from time import time, ctime
 
 template_dir = os.path.abspath('./FRONT_END')
 app = Flask(__name__, template_folder = template_dir)
@@ -36,7 +36,7 @@ def i1():
         return render_template('no_user_found.html')
     headings, details = db.check_admin_password(id,password)
     if(len(details) == 0):
-        return "Wrong Password"
+        return "Wrong userID/Password"
     return render_template('adminactions.html', user = id)
 
 @app.route('/add_to_course', methods=["POST"])
@@ -223,7 +223,7 @@ def index4():
     password = request.form['Password']
     headings, details = db.check_prof_password(id,password)
     if(len(details)==0):
-        return "Wrong Password"
+        return "Wrong userID/Password"
     headings, details = db.get_all_courses_of_prof(id)
     if(len(details) == 0):
         return render_template('no_user_found.html')
@@ -264,8 +264,8 @@ def index17(user, course):
 @app.route('/courses/v_submission/<ass_id>/<user>/<course>', methods=["GET", "POST"])
 def index23(user, course, ass_id):
     assgn = db.get_student_submission(user, course, ass_id)
-    if(len(assgn) == 0):
-        return render_template('no_assgn_student.html', user=user)
+    # if(len(assgn) == 0):
+    #     return render_template('no_assgn_student.html', user=user)
     return render_template('v_assgn.html', text=assgn[0][0])
 
 @app.route('/courses/v_submission/<user>/<course>', methods=["GET", "POST"])
@@ -405,6 +405,8 @@ def index22(user, course, ass_id):
 @app.route('/student_id/s_assgn/<user>/<course>', methods=["GET", "POST"])
 def index13(user, course):
     assgn = db.get_all_assgn(user, course)
+    if(len(assgn) == 0):
+        return render_template("no_assgn_to_submit.html")
     return render_template("s_assgn_list.html", user=user, course=course, assgn=assgn)
 
 
@@ -431,8 +433,8 @@ def index25(user, course, ass_id):
 def index15(user, course):
     assgn = db.get_all_assgn(user, course)
 
-    # if(len(grade) == 0):
-    #     return render_template("not_graded_yet.html", grade=grade)
+    if(len(assgn) == 0):
+        return render_template("no_assgn_to_show_grades.html")
 
     return render_template("grade_list.html", user=user, course=course, assgn=assgn)
 
