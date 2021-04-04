@@ -87,6 +87,26 @@ def i22():
 def i24():
     return render_template('view_professor_input.html')
 
+@app.route('/view_allprof', methods=["GET",])
+def profunc():
+    headings,details=db.get_all_prof()
+    return render_template('view_all_prof.html', details=details, headings=headings)
+
+@app.route('/view_prof/<id>', methods=["GET"])
+def prfunc2(id):
+    headings,details=db.get_all_courses_of_prof(id)
+    return render_template('view_courses.html', details=details, headings=headings)
+
+@app.route('/view_allstudents', methods=["GET"])
+def stufunc():
+    headings,details=db.get_all_students()
+    return render_template('view_all_students.html', details=details, headings=headings)
+
+@app.route('/view_student/<id>', methods=["GET"])
+def stufunc1(id):
+    headings,details=db.get_all_coursesOf_id(id)
+    return render_template('view_courses.html', details=details, headings=headings)
+
 
 @app.route('/abcd', methods=["POST"])
 def i3():
