@@ -2,9 +2,11 @@ from flask import Flask, render_template, redirect, url_for, request
 #from flask_modus import Modus
 import db
 import time
+import os
 from time import time,ctime
 
-app = Flask(__name__)
+template_dir = os.path.abspath('./FRONT_END')
+app = Flask(__name__, template_folder = template_dir)
 #modus = Modus(app)
 
 @app.route('/')
@@ -72,6 +74,18 @@ def i16():
 @app.route('/update_ngu', methods=["POST"])
 def i18():
     return render_template('update_ngu.html')
+
+@app.route('/view_course', methods=["POST"])
+def i20():
+    return render_template('view_course_input.html')
+
+@app.route('/view_student', methods=["POST"])
+def i22():
+    return render_template('view_student_credentials.html')
+
+@app.route('/view_prof', methods=["POST"])
+def i24():
+    return render_template('view_professor_input.html')
 
 
 @app.route('/abcd', methods=["POST"])
@@ -165,6 +179,30 @@ def i19():
     db.update_ngu(s_id,hours)
     return render_template('Success.html')
 
+@app.route('/view_this_course', methods=["POST"])
+def i21():
+    c_id = request.form['course_id']
+    headings, details = db.get_all_studentsOf_courseid(c_id)
+    if(len(details) == 0):
+        return "Course Not Found"
+    return render_template('view_courses.html',headings = headings, details = details)
+
+@app.route('/view_this_professor', methods=["POST"])
+def i23():
+    p_id = request.form['prof_id']
+    headings, details = db.get_all_courses_of_prof(p_id)
+    if(len(details) == 0):
+        return "Professor Not Found"
+    return render_template('view_courses.html',headings = headings, details = details)
+
+@app.route('/view_this_student', methods=["POST"])
+def i25():
+    s_id = request.form['user_id']
+    headings, details = db.get_all_coursesOf_id(s_id)
+    if(len(details) == 0):
+        return "Student Not Found"
+    return render_template('view_courses.html',headings = headings, details = details)
+
 @app.route('/<id>', methods=["POST"])
 def index2(id):
     id = request.form['user_id']
@@ -251,14 +289,14 @@ def index8(user):
 @app.route('/aw-request/<user>/success', methods=["GET", "PUT", "POST"])
 def index9(user):
     course=request.form["course_id"]
+    option=request.form["option"]
     headings, details = db.check_update_course_req_table(user,course)
     if(len(details)==0):
         return "You do not belong to this course. Kindly enter a course you are registered in"
     headings, details = db.check_update_course_req_table2(user,course)
     if(len(details)!=0):
         return "You have already requested for this course"
-    db.update_course_req_table(user,course,"A")
-
+    db.update_course_req_table(user,course, option)
     #db.change_status("A",user,course)
     return render_template("ty.html")
 
@@ -267,9 +305,9 @@ def func(course):
     headings, details=db.get_course_req(course)
     return render_template("aud_req_view.html", details=details, headings=headings)
 
-@app.route('/awrequest/success/<user>/<course>', methods=["GET", "PUT","POST"])
-def func2(user,course):
-    db.change_status("A",user,course)
+@app.route('/awrequest/success/<user>/<course>/<option>', methods=["GET", "PUT","POST"])
+def func2(user,course,option):
+    db.change_status(option,user,course)
     db.del_course_aud_request(course,user)
     return render_template("ty.html")
 
