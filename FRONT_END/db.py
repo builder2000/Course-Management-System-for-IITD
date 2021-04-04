@@ -68,15 +68,6 @@ def connect():
     password="p9TUnVkM")
     return c
 
-
-def get_all_students():
-  conn = connect()
-  cur = conn.cursor()
-  cur.execute("SELECT cs.uid, cs.name, c.Courseid, c.Units, c.Slot_Name FROM course_student cs inner join courses c on (c.Courseid=cs.course and cs.uid='cs5180415') order by Courseid")
-  details = cur.fetchall()
-  cur.close()
-  conn.close()
-  return details
 def get_all_coursesOf_id(id): #courses of a student with student id, id
   conn = connect()
   cur = conn.cursor()
@@ -645,3 +636,25 @@ def get_all_assgn(user, course):
   cur.close()
   conn.close()
   return details
+
+def get_all_prof():
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select c.Instructor_Email, c.Courseid, c.Course_Name, c.Slot_Name, c.Units, c.Lecture_Time from courses c order by c.Courseid"
+  cur.execute(SQL)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)
+
+def get_all_students():
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "select * from studentInfo"
+  cur.execute(SQL)
+  details = cur.fetchall()
+  cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return (cols, details)

@@ -1,0 +1,40 @@
+<head>
+    <style>
+        .table{
+            border: spacing 0;
+            margin:1rem;
+            background-color: #f5f5f5;
+        }
+        .table_row:nth-child(odd){
+           background-color: #e5e5e544;
+        }
+        .table_cell{
+           padding: 8px;
+        }
+    </style>
+</head>
+{% extends 'base.html' %}
+{% block content %}
+    <div>
+        <table class="table">
+            <tr class="table_header">
+                {% for header in headings %}
+                <th>{{header}}</th>
+                {% endfor %}
+                
+            </tr>
+            {% for row in details %}
+            <tr class="table_row">
+                {% for cell in row %}
+                <td class="table_cell">{{cell}}</td>
+                {% endfor %}
+                <td><form>
+                    <button formaction="/view_student/{{row[0]}}">See his/her courses seperately</button>
+                </form></td>
+                
+            </tr>
+            {% endfor %}
+            </table>
+    
+    </div>
+{% endblock %}

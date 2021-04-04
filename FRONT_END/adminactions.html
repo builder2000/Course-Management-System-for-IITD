@@ -3,57 +3,82 @@
 <div align="center">
     <!-- <h1>PDF Splitter</h1> -->
     <!-- <hr><br> -->
+    Actions related to courses
     <form action="/add_to_course" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="add_to_course">
     </form>
+    <br>
     <form action="/add_course" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="add_course">
     </form>
-    <form action="/add_student" method="post" enctype="multipart/form-data">
-
-        <input type="submit" value="add_student">
-    </form>
+    <br>
     <form action="/delete_from_course" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="delete_from_course">
     </form>
+    <br>
     <form action="/delete_course" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="delete_course">
     </form>
+    <br><br><br>
+    Action related to Students
+    <form action="/add_student" method="post" enctype="multipart/form-data">
+
+        <input type="submit" value="add_student">
+    </form>
+    <br>
     <form action="/delete_student" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="delete_student">
     </form>
+    <br>
     <form action="/update_student" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="update_student">
     </form>
+    <br>
     <form action="/update_ngu" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="update_ngu_details">
     </form>
+    <br>
     <form action="/update_dues" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="update_dues_details">
     </form>
+    <br>
+    <form>
+        <button formaction="/admin/gen_req">See all unresolved general requests</button>
+    </form>
+
+    <br><br><br>
+    View details regarding professors, courses and Students
     <form action="/view_course" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="view_course_details">
     </form>
+    <br>
     <form action="/view_student" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="view_student_details">
     </form>
+    <br>
     <form action="/view_prof" method="post" enctype="multipart/form-data">
 
         <input type="submit" value="view_prof_details">
     </form>
+    <br>
     <form>
-        <button formaction="/admin/gen_req">See all general requests</button>
+        <button formaction="/view_allprof">See Details of All Professors</button>
     </form>
+    <br>
+    <form>
+        <button formaction="/view_allstudents">See Details of All Students</button>
+    </form>
+    
     <br><br><br><br><br><br>
     <form>
         <button formaction="/admin_id/{{user}}/password_change">Change Password</button>
