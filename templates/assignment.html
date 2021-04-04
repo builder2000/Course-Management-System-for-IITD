@@ -6,6 +6,9 @@
     <h3>Please add assignment.</h3>
     <hr><br>
     <form action="/add_assignment/{{id}}/success" method="post" enctype="multipart/form-data">
+        Assignment id <br>
+        <textarea name="assgn_id" cols="5" rows="1"></textarea><br><br>
+        Assignment details <br>
         <textarea name="paragraph_text" cols="50" rows="10"></textarea><br>
         <input type="submit" value="Add">
     </form>

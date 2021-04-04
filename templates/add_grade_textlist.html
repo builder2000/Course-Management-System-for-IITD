@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div align="center">
+
+    {% for ass_id in assgn %}
+    <td>
+        <form>
+            <button formaction="/courses/add_grade/{{ass_id[0]}}/{{user}}/{{course}}">{{ass_id[0]}}</button>
+        </form>
+    </td>
+    {% endfor %}
+
+</div>
+{% endblock %}

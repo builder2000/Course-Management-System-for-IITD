@@ -201,26 +201,41 @@ def index5(id):
     return render_template('ngu.html', headings=headings, details=details)
 
 
-@app.route('/courses/add_grade/<user>/<course>/success', methods=["GET", "POST"])
-def index16(user, course):
+@app.route('/courses/add_grade/<ass_id>/<user>/<course>/success', methods=["GET", "POST"])
+def index16(user, course, ass_id):
     # headings, details = db.get_all_studentsOf_courseid(id)
     grade = request.form["paragraph_text"]
-    db.add_grade(user, course, grade)
+    db.add_grade(user, course, grade, ass_id)
 
     return render_template('add_grade_success.html', user=user)
 
+
+@app.route('/courses/add_grade/<ass_id>/<user>/<course>', methods=["GET", "POST"])
+def index24(user, course, ass_id):
+    return render_template('add_grade_text.html', user=user, course=course, ass_id=ass_id)
+
+
 @app.route('/courses/add_grade/<user>/<course>', methods=["GET", "POST"])
 def index17(user, course):
-    # headings, details = db.get_all_studentsOf_courseid(id)
-    return render_template('add_grade_text.html', user=user, course=course)
+    assgn = db.get_all_assgn(user, course)
+    if(len(assgn)==0):
+        return render_template('no_assgn_added.html')
+    return render_template('add_grade_textlist.html', user=user, course=course, assgn=assgn)
 
 
-@app.route('/courses/v_submission/<user>/<course>', methods=["GET", "POST"])
-def index18(user, course):
-    assgn = db.get_student_submission(user, course)
+@app.route('/courses/v_submission/<ass_id>/<user>/<course>', methods=["GET", "POST"])
+def index23(user, course, ass_id):
+    assgn = db.get_student_submission(user, course, ass_id)
     if(len(assgn) == 0):
         return render_template('no_assgn_student.html', user=user)
     return render_template('v_assgn.html', text=assgn[0][0])
+
+@app.route('/courses/v_submission/<user>/<course>', methods=["GET", "POST"])
+def index18(user, course):
+    assgn = db.get_all_assgn(user, course)
+    # if(len(assgn) == 0):
+    #     return render_template('no_assgn_student.html', user=user)
+    return render_template('v_assgn_sublist.html', user=user, course=course, assgn=assgn)
 
 
 @app.route('/courses/<id>', methods=["GET"])
@@ -320,45 +335,68 @@ def index10(id):
 
 @app.route("/add_assignment/<id>/success", methods=["GET", "PUT", "POST"])
 def index11(id):
+    assgn_id = request.form["assgn_id"]
     assgn = request.form["paragraph_text"]
     # some work to do with database
-    db.add_assignment_for_course(id, assgn)
+    db.add_assignment_for_course(id, assgn_id, assgn)
     # assignment addition successful
     # add a button to go to the page of prof
     return render_template("assignment_success.html")
 
 
+@app.route('/student_id/v_assgn/<ass_id>/<user>/<course>', methods=["GET", "POST"])
+def index21(user, course, ass_id):
+    assgn = db.get_assgn(user, course, ass_id)
+    # if(len(assgn) == 0):
+    #     return render_template('no_assgn.html')
+    return render_template('v_assgn.html', text=assgn[0][0])
+
 @app.route('/student_id/v_assgn/<user>/<course>', methods=["GET", "POST"])
 def index12(user, course):
-    assgn = db.get_assgn(course)
+    assgn = db.get_all_assgn(user, course)
     if(len(assgn) == 0):
         return render_template('no_assgn.html')
-    return render_template('v_assgn.html', text = assgn[0][0])
+    return render_template('v_assgn_list.html', user=user, course=course, assgn=assgn)
+
+
+@app.route('/student_id/s_assgn/<ass_id>/<user>/<course>', methods=["GET", "POST"])
+def index22(user, course, ass_id):
+    return render_template("s_assignment.html", user=user, course=course, ass_id=ass_id)
 
 
 @app.route('/student_id/s_assgn/<user>/<course>', methods=["GET", "POST"])
 def index13(user, course):
-    return render_template("s_assignment.html", user=user, course=course)
+    assgn = db.get_all_assgn(user, course)
+    return render_template("s_assgn_list.html", user=user, course=course, assgn=assgn)
 
 
-@app.route('/student_id/s_assgn/<user>/<course>/success', methods=["GET", "POST"])
-def index14(user, course):
+@app.route('/student_id/s_assgn/<ass_id>/<user>/<course>/success', methods=["GET", "POST"])
+def index14(user, course, ass_id):
     assgn = request.form["paragraph_text"]
     # some work to do with database
-    db.add_submission_to_table(user, course, assgn)
+    db.add_submission_to_table(user, course, ass_id, assgn)
     # assignment addition successful
     # add a button to go to the page of prof
     return render_template("assignment_s_success.html")
 
 
-@app.route('/student_id/view_grade/<user>/<course>', methods=["GET", "POST"])
-def index15(user, course):
-    grade = db.get_grade(user, course)
+@app.route('/student_id/view_grade/<ass_id>/<user>/<course>', methods=["GET", "POST"])
+def index25(user, course, ass_id):
+    grade = db.get_grade(user, course, ass_id)
 
     if(len(grade) == 0):
         return render_template("not_graded_yet.html", grade=grade)
 
-    return render_template("grade.html", grade=grade)
+    return render_template("grade.html", grade=grade[0])
+
+@app.route('/student_id/view_grade/<user>/<course>', methods=["GET", "POST"])
+def index15(user, course):
+    assgn = db.get_all_assgn(user, course)
+
+    # if(len(grade) == 0):
+    #     return render_template("not_graded_yet.html", grade=grade)
+
+    return render_template("grade_list.html", user=user, course=course, assgn=assgn)
 
 
 

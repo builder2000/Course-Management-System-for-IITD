@@ -4,7 +4,7 @@ conn= psycopg2.connect(
     host="localhost",
     database="postgres",
     user="postgres",
-    password="") #gitignore
+    password="p9TUnVkM") #gitignore
 cur = conn.cursor()
 
 cur.execute("DROP TABLE IF EXISTS course_student")
@@ -49,7 +49,7 @@ cur.execute(
     "copy dues_table from 'D:/DBMS_Project/COL362-Project/Project/Dues_List-converted.csv' delimiter ',' csv header")  # gitignore
 cur.execute("DROP TABLE IF EXISTS course_student_assn")
 cur.execute(
-    "CREATE TABLE course_student_assn (uid text, student text, course text, assignment text, submission text, grade text)")
+    "CREATE TABLE course_student_assn (uid text, student text, course text, assignment_id text, assignment text, submission text, grade text)")
 
 
 
@@ -66,7 +66,7 @@ def connect():
     host="localhost",
     database="postgres",
         user="postgres",
-    password="")
+    password="p9TUnVkM")
     return c
 
 
@@ -480,15 +480,15 @@ def view_req(user):
   return (cols,details)
 
 
-def add_assignment_for_course(course_id, assgn):
+def add_assignment_for_course(course_id, assgn_id, assgn):
 
   d, l = get_all_studentsOf_courseid(course_id)
   conn = connect()
   cur = conn.cursor()
 
   for i in range(len(l)):
-    SQL = "INSERT INTO course_student_assn(uid, student, course, assignment) VALUES(%s, %s, %s, %s)"
-    data = (l[i][0], l[i][1], course_id, assgn)
+    SQL = "INSERT INTO course_student_assn(uid, student, course, assignment_id, assignment) VALUES(%s, %s, %s, %s, %s)"
+    data = (l[i][0], l[i][1], course_id,assgn_id, assgn)
     cur.execute(SQL, data)
   conn.commit()
   cur.close()
@@ -496,11 +496,11 @@ def add_assignment_for_course(course_id, assgn):
   return
 
 
-def get_assgn(course):
+def get_assgn(user, course, ass_id):
   conn = connect()
   cur = conn.cursor()
-  SQL = "SELECT assignment from course_student_assn where course=%s"
-  data = (course, )
+  SQL = "SELECT assignment from course_student_assn where uid = %s AND course=%s AND assignment_id=%s"
+  data = (user, course, ass_id)
   cur.execute(SQL, data)
   details = cur.fetchall()
   # cols = list(map(lambda x: x[0], cur.description))
@@ -509,22 +509,22 @@ def get_assgn(course):
   return details
 
 
-def add_submission_to_table(user, course, assgn):
+def add_submission_to_table(user, course, ass_id, assgn):
   conn = connect()
   cur = conn.cursor()
-  SQL = "UPDATE course_student_assn SET submission = %s WHERE uid=%s AND course=%s"
-  data = (assgn, user, course, )
+  SQL = "UPDATE course_student_assn SET submission = %s WHERE uid=%s AND course=%s AND assignment_id=%s"
+  data = (assgn, user, course, ass_id, )
   cur.execute(SQL, data)
   conn.commit()
   cur.close()
   conn.close()
 
 
-def add_grade(user, course, grade):
+def add_grade(user, course, grade, ass_id):
   conn = connect()
   cur = conn.cursor()
-  SQL = "UPDATE course_student_assn SET grade = %s WHERE uid=%s AND course=%s"
-  data = (grade, user, course, )
+  SQL = "UPDATE course_student_assn SET grade = %s WHERE uid=%s AND course=%s AND assignment_id=%s"
+  data = (grade, user, course, ass_id, )
   cur.execute(SQL, data)
   conn.commit()
   cur.close()
@@ -588,11 +588,11 @@ def update_dues2(s_id, amtdue):
   conn.close()
 
 
-def get_student_submission(user, course):
+def get_student_submission(user, course, ass_id):
   conn = connect()
   cur = conn.cursor()
-  SQL = "SELECT submission from course_student_assn where course=%s AND uid=%s"
-  data = (course, user, )
+  SQL = "SELECT submission from course_student_assn where course=%s AND uid=%s AND assignment_id=%s"
+  data = (course, user, ass_id, )
   cur.execute(SQL, data)
   details = cur.fetchall()
   # cols = list(map(lambda x: x[0], cur.description))
@@ -622,11 +622,24 @@ def check_update_ngu(s_id):
   return (cols, details)
 
 
-def get_grade(user, course):
+def get_grade(user, course, ass_id):
   conn = connect()
   cur = conn.cursor()
-  SQL = "SELECT grade from course_student_assn where course=%s AND uid=%s"
-  data = (course, user, )
+  SQL = "SELECT grade from course_student_assn where course=%s AND uid=%s AND assignment_id=%s"
+  data = (course, user, ass_id, )
+  cur.execute(SQL, data)
+  details = cur.fetchall()
+  # cols = list(map(lambda x: x[0], cur.description))
+  cur.close()
+  conn.close()
+  return details
+
+
+def get_all_assgn(user, course):
+  conn = connect()
+  cur = conn.cursor()
+  SQL = "SELECT assignment_id from course_student_assn where uid = %s AND course=%s"
+  data = (user, course, )
   cur.execute(SQL, data)
   details = cur.fetchall()
   # cols = list(map(lambda x: x[0], cur.description))
