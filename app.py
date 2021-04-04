@@ -2,9 +2,11 @@ from flask import Flask, render_template, redirect, url_for, request
 #from flask_modus import Modus
 import db
 import time
+import os
 from time import time,ctime
 
-app = Flask(__name__)
+template_dir = os.path.abspath('./FRONT_END')
+app = Flask(__name__, template_folder = template_dir)
 #modus = Modus(app)
 
 @app.route('/')

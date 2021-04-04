@@ -1,5 +1,4 @@
 import psycopg2
-import numpy as np
 conn= psycopg2.connect(
     host="localhost",
     database="postgres",
